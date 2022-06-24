@@ -1,20 +1,40 @@
-apiVersion: apiextensions.k8s.io/v1beta1
+apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
+  # name must match the spec fields below, and be in the form: <plural>.<group>
   name: etcdclusters.etcd.database.coreos.com
 spec:
+  # group name to use for REST API: /apis/<group>/<version>
   group: etcd.database.coreos.com
   names:
+    # kind is normally the CamelCased singular type. Your resource manifests use this.
     kind: EtcdCluster
     listKind: EtcdClusterList
+    # plural name to be used in the URL: /apis/<group>/<version>/<plural>
     plural: etcdclusters
+    # shortNames allow shorter string to match your resource on the CLI
     shortNames:
-    - etcdclus
-    - etcd
+      - etcdclus
+      - etcd
+    # singular name to be used as an alias on the CLI and for display
     singular: etcdcluster
+  # either Namespaced or Cluster
   scope: Namespaced
-  version: v1beta2
+  # list of versions supported by this CustomResourceDefinition
   versions:
-  - name: v1beta2
-    served: true
-    storage: true
+    - name: v1beta2
+      # Each version can be enabled/disabled by Served flag.
+      served: true
+      # One and only one version must be marked as the storage version.
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                size:
+                  type: integer
+                version:
+                  type: string
